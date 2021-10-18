@@ -1,0 +1,48 @@
+<p>home works!</p>
+<p>https://www.bilibili.com/video/BV1gf4y1a7Uk?p=27&spm_id_from=pageDriver</p>
+<hr>
+<!--老師的失敗寫法，想透過query切換網址，去影響List頁面中的page參數，用這個page當作從json整理出的list的index，
+  但是因為當進List頁面後，ngOnInit就不會再被觸發，因此第一次點到後會觸切換資料，但之後再怎麼案都不會有反應，
+  必須先換到其他頁，再切到list才會有切頁效果
+<a [routerLink]="['/home/list']" [queryParams]="{page:page}"  routerLinkActive="router-link-active" >去LIST</a>-->
+<!--改寫老師的code  改寫在DoCheck裡  然後整合a 跟 button  不然按完按鈕還要按超連結很怪-->
+<button (click)="pageChange()"  [routerLink]="['/home/list']" [queryParams]="{page:page}"  routerLinkActive="router-link-active" >切頁</button>
+
+<!--捨棄老師的方式 單純只在list換頁  不管參數 -->
+<a [routerLink]="['/home/list']" routerLinkActive="router-link-active" >去LIST</a>
+
+
+<hr>
+<!--home路由下的 子路由渲染的位置-->
+<router-outlet></router-outlet>
+<hr>
+
+<!--傳遞一個title變數給 title composent-->
+<button (click)="titleChange()">變身</button>
+<p>調用title 第一次</p>
+<app-title [title]="title"></app-title>
+<p>調用title 第一次 結束</p>
+
+<p *ngFor="let item of list">{{item}}</p>
+<!--addList是子的fun(他是彈射的fun)   addListFun是父的fun event是來自於子fun透過所謂彈射，丟給父的參數-->
+<!--所以子頁面按按鈕，處發彈射的fun，彈射的fun綁定在這，就可以把彈射出的str，以event的寫法交給addListFun是父的fun-->
+<!--<app-title (addList)="addListFun($event)" [title]="title"></app-title>-->
+
+<!--這裡是這樣 父端可以直接CALL子的FUN
+所以就是原本是子按按鈕去觸發，現在多一個是可以由父觸發子後再觸發父
+但通常只是要去子拿資料 這裡只是練習一下
+-->
+<p>調用title 第二次</p>
+<app-title #titleDom (addList)="addListFun($event)" [title]="title"></app-title>
+<p>調用title 第二次 結束</p>
+
+<button (click)="addFun()">調用子組件</button>
+
+
+<hr>
+<p>測試服務的作用</p>
+<p *ngFor="let item of listForServiceDemo">{{item}}</p>
+<hr>
+<p>繼續測試服務的作用，加新資料進service裡的list</p>
+<button (click)="addNode()">加新資料試試</button>
+

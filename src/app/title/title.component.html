@@ -1,0 +1,14 @@
+<!--
+<p>title works!</p>
+<p>{{title}} </p>
+-->
+<div>
+  <div class="left">{{title}}</div>
+  <button (click)="addBtnFun()">動一下</button>
+</div>
+
+
+<p>-----------------------------------------------</p>
+<p>在title內部看看能不能撈到共用的LIST內的資料</p>
+<p *ngFor="let item of listForServiceDemo">{{item}}</p>
+<p>-----------------------------------------------</p>
