@@ -1,0 +1,208 @@
+<!--<p>hello works!</p>-->
+<p>{{name+"asd"}}</p>
+<p>{{1+1}}</p>
+<p>{{name ? 1+1 : name}}</p>
+<p>{{false? 1+1 : name}}</p>
+
+<p>{{date}}</p>
+<div [id]="'box'">屬性綁定</div>
+<div [id]="box">屬性綁定</div>
+
+<p [class]="'item'">class 綁定</p>
+<p [class]="itemClass">class 綁定</p>
+
+<h3 [class.h3-dom]="h3Dom">hello {{1+1}}</h3>
+<h3 [class]="'h3-Dom font-w string'">多類名榜定hello {{1+1}}</h3>
+<h3 [class]="h3Class">多類名榜定2hello {{1+1}}</h3>
+<h3 [class]="{'h3-dom':true,'title-dom':false}">蕾明條件渲染hello~ {{1+1}}</h3>
+<h3 [class]="['h3-dom','title-dom']">數組渲染</h3>
+
+<h3 [style.width]="'300px'">單依樣是綁定</h3>
+<h3 [style.color]="'red'">單依樣是綁定</h3>
+<h3 [style.width.px]="'300'">單依樣是綁定</h3>
+<h3 [style]="'background:red;color:#fff'">多樣式綁定</h3>
+<h3 [style]="{'background':'red','color':'#fff'}">用map多樣式綁定</h3>
+
+
+<h3 [ngClass]="{'active':isActive}">ngClass綁定</h3>
+<h3 [ngStyle]="{'color':'red'}">ngStyle</h3>
+<h3 [ngStyle]="{'font-size':isMax? '24px':'12px'}">ng搭配三元</h3>
+
+<div *ngIf="isMax">isMax=true</div>
+<div *ngIf="!isMax">isMax=false</div>
+
+<ng-template [ngIf]="isMax">
+    <div>Max title</div>
+</ng-template>
+<hr>
+
+<ng-container *ngIf="isMax; else elseTemplate">
+    <div>isMax 是true </div>
+</ng-container>
+<ng-template #elseTemplate>
+  <div>isMax 是false </div>
+</ng-template>
+
+<hr>
+<!--循環-->
+<div *ngFor="let color of colors let cci=index let sodd=odd">
+  {{sodd}}
+  {{cci}}
+  {{color}}
+</div>
+<hr>
+<!--上面這個其實等於下面這個-->
+<ng-template ngFor let-color [ngForOf]="colors" let-i ="index" let-odd="odd">
+  <div>{{odd}}{{i}}{{color}}</div>
+</ng-template>
+
+
+
+<div [ngSwitch]="type">
+  <p *ngSwitchCase="1">
+    type:1
+  </p>
+  <p *ngSwitchCase="2">
+    type:2
+
+  </p>
+  <p *ngSwitchDefault>
+    type!=1 2
+
+  </p>
+</div>
+<hr>
+<!--事件類型 事件function-->
+<!--#userName 給名子  這東西叫模板引用變量-->
+<input #userName type="text" (input)="inpChange($event)" name="" id="">
+<button (click)="clickFun($event)" >點擊</button>
+<!-- 這東西叫模板引用變量 使用#來宣告模板變量(#userName) 之後可直接對他進行操作 -->
+
+<button (click)="getUserName(userName.value)" >獲取</button>
+
+<hr>
+
+
+<!--模板引用變量 也可以宣告在外層-->
+<div #box>
+  <input  #userName2 type="text" name="" id="">
+  <button></button>
+</div>
+<button (click)="getUserName(userName2.value)" >獲取</button>
+<hr>
+
+<!--雙向綁定 ngModel只對表單元素有效-->
+<input [(ngModel)]="title" type="text">
+<p>title={{title}}</p>
+
+<hr>
+<!--FormControl優勢是可以直接控制一組表單的樣子，
+  但是沒有搭配FormGroup的話也不能控一組啊?-->
+
+  <!--動態表單控件-->
+
+  年齡<input type="text" [formControl]="age">
+<br>
+<p>輸入的年齡:{{age.value}}</p>
+<button (click)="ageChangeFun()">改成18</button>
+
+<hr>
+
+<!--動態表單控件組-->
+<!--
+屬性名加上方括號後，等號右側會是變數名(雙引號內部是變數) 或者加上單引號 直接給值
+所以[]方框內的也不是 型態
+
+-->
+<form [formGroup]="loginForm">
+  <label>
+    帳號:
+    <input type="text" formControlName="userName">
+  </label>
+
+  <label>
+    密碼:
+    <input type="text" formControlName="password">
+  </label>
+<button (click)="subFormFun()">提交</button>
+
+</form>
+
+<!--表單驗證-->
+<hr>
+<hr>
+
+<form action="loginForm">
+  帳號:
+  <input required #nameInp="ngModel" type="text" [(ngModel)]="formData.name" name="userName">
+  <br>
+  驗證是否通過
+  <br>
+  <!--<span>驗證結果:{{nameInp.valid}}</span>-->
+  <span *ngIf="nameInp.valid">請輸入帳號</span>
+
+  <hr>
+  密碼:
+  <input required #pasInp="ngModel" type="text" [(ngModel)]="formData.password" name="password">
+  <br>
+  驗證是否通過
+  <br>
+  <span>驗證結果:{{pasInp.valid}}</span>
+
+  <button (click)="subBtnFun(nameInp)">提交</button>
+
+</form>
+
+<hr>
+<!--自定義表單驗證-->
+
+
+<form [formGroup]="valiDataForm">
+  <label>
+    帳號:
+    <input type="text" formControlName="userName">
+  </label>
+  <br>
+  <!--因為可能什麼都取得不到，加一個問號表示如果有值，再做?後面的事，怎麼都是三元的寫法-->
+  <!--取得這個表單的formControlName="userName"-->
+  <!--這個先碼掉  換一個方式寫
+    <p>{{valiDataForm.get('userName')?.errors?.required?'請輸入帳號':''}}</p>-->
+  <p *ngIf="valiDataForm.get('userName')?.errors?.required">請輸入帳號</p>
+  <p *ngIf="valiDataForm.get('userName')?.errors?.minlength?.requiredLength
+  ||valiDataForm.get('userName')?.errors?.maxlength?.requiredLength">帳號長度再6~18之間</p>
+
+  <br>
+  <label>
+    密碼:
+    <input type="text" formControlName="password">
+  </label>
+  <br>
+  <!--用兩行是因為，驗證回傳的結果，沒密碼跟密碼格式錯誤回傳的資料結構長的不同，才分兩行寫-->
+  <p *ngIf="valiDataForm.get('password')?.errors?.msg">{{valiDataForm.get('password')?.errors?.msg}}</p>
+  <p *ngIf="valiDataForm.get('password')?.errors?.passwordValidator?.msg">{{valiDataForm.get('password')?.errors?.passwordValidator?.msg}}</p>
+
+  <br>
+
+  <label>
+    手機:
+    <input type="text" formControlName="phone">
+  </label>
+  <br>
+  <!--這裡兩次回傳的資料結構都一樣 所以沒差-->
+  <p *ngIf="valiDataForm.get('phone')?.errors?.msg">{{valiDataForm.get('phone')?.errors?.msg}}</p>
+  <br>
+<button (click)="subValiDataFormFun()">提交</button>
+
+</form>
+
+
+<hr>
+<!--pipe 管道-->
+<p>{{dateStr}}</p>
+<p>{{dateStr | date:'yyyy-MM-dd HH:mm:ss'}}</p>
+<p>{{name}}</p>
+<p>{{name | uppercase |lowercase }}</p>
+<p>{{name | test }}</p>
+
+<hr>
+<!--pipe 管道-->
